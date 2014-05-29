@@ -1,0 +1,19 @@
+---
+- apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - python-software-properties
+    - python-apt
+    - ubuntu-cloud-keyring
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'precise'
+
+- apt_repository: repo='deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/icehouse main'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'precise'
+
+- apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - openstack-dashboard
+
+- apt: name=openstack-dashboard-ubuntu-theme state=absent purge=yes
+
+- template: src=local_settings.py.j2 dest=/etc/openstack-dashboard/local_settings.py
+

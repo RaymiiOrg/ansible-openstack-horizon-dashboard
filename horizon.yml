@@ -1,0 +1,8 @@
+---
+- hosts: horizon
+  user: root
+
+  roles:
+  - { role: memcached, sudo: yes }
+  - { role: apache2, sudo: yes }
+  - { role: horizon, sudo: yes }

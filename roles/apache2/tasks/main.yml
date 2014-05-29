@@ -1,0 +1,34 @@
+---
+- apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - apache2
+    - libapache2-mod-wsgi
+
+- file: src=/etc/apache2/sites-available/default-ssl dest=/etc/apache2/sites-enabled/default-ssl state=link
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'precise'
+  notify: restart apache
+
+- file: src=/etc/apache2/sites-available/default-ssl.conf dest=/etc/apache2/sites-enabled/default-ssl.conf state=link
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  notify: restart apache
+
+- file: src=/etc/apache2/mods-available/socache_shmcb.load dest=/etc/apache2/mods-enabled/socache_shmcb.load state=link
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  notify: restart apache
+
+- file: src=/etc/apache2/mods-available/rewrite.load dest=/etc/apache2/mods-enabled/rewrite.load state=link
+  notify: restart apache
+
+- file: src=/etc/apache2/mods-available/ssl.load dest=/etc/apache2/mods-enabled/ssl.load state=link
+  notify: restart apache
+
+- file: src=/etc/apache2/mods-available/wsgi.load dest=/etc/apache2/mods-enabled/wsgi.load state=link
+  notify: restart apache
+
+- file: src=/etc/apache2/mods-available/ssl.conf dest=/etc/apache2/mods-enabled/ssl.conf state=link
+  notify: restart apache
+
+- file: src=/etc/apache2/mods-available/wsgi.conf dest=/etc/apache2/mods-enabled/wsgi.conf state=link
+  notify: restart apache
+
+
